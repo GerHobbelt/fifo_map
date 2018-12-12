@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(nlohmann_fifo_map
   LANGUAGES CXX
-  VERSION "0.0.0-0dfbf5d")
+  VERSION "0.0.0")
 
 include_directories(
     src
