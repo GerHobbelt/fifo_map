@@ -7,8 +7,8 @@
 @see https://github.com/nlohmann/fifo_map
 */
 
-#define CATCH_CONFIG_MAIN
-#include <catch/catch.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest/doctest.h>
 
 // allow accessing private members
 #define private public
@@ -53,7 +53,7 @@ TEST_CASE("element access")
     fifo_map<std::string, int> m = {{"C", 1}, {"A", 2}, {"B", 3}};
     const fifo_map<std::string, int> mc = m;
 
-    SECTION("at")
+    SUBCASE("at")
     {
         CHECK(m.at("C") == 1);
         CHECK(m.at("A") == 2);
@@ -68,7 +68,7 @@ TEST_CASE("element access")
         CHECK_THROWS_AS(mc.at("Z"), std::out_of_range&);
     }
 
-    SECTION("operator[] (rvalue)")
+    SUBCASE("operator[] (rvalue)")
     {
         CHECK(m["C"] == 1);
         CHECK(m["A"] == 2);
@@ -78,7 +78,7 @@ TEST_CASE("element access")
         CHECK(m["Z"] == 0);
     }
 
-    SECTION("operator[] (lvalue)")
+    SUBCASE("operator[] (lvalue)")
     {
         const std::string s_C = "C";
         const std::string s_A = "A";
@@ -98,7 +98,7 @@ TEST_CASE("iterators")
     fifo_map<std::string, int> m = {{"C", 1}, {"A", 2}, {"B", 3}};
     const fifo_map<std::string, int> mc = m;
 
-    SECTION("begin/end with nonconst object")
+    SUBCASE("begin/end with nonconst object")
     {
         fifo_map<std::string, int>::iterator it = m.begin();
         CHECK(it->first == "C");
@@ -113,7 +113,7 @@ TEST_CASE("iterators")
         CHECK(it == m.end());
     }
 
-    SECTION("begin/end with const object")
+    SUBCASE("begin/end with const object")
     {
         fifo_map<std::string, int>::const_iterator it = mc.begin();
         CHECK(it->first == "C");
@@ -128,7 +128,7 @@ TEST_CASE("iterators")
         CHECK(it == mc.end());
     }
 
-    SECTION("cbegin/cend with nonconst object")
+    SUBCASE("cbegin/cend with nonconst object")
     {
         fifo_map<std::string, int>::const_iterator it = m.cbegin();
         CHECK(it->first == "C");
@@ -143,7 +143,7 @@ TEST_CASE("iterators")
         CHECK(it == m.cend());
     }
 
-    SECTION("cbegin/cend with const object")
+    SUBCASE("cbegin/cend with const object")
     {
         fifo_map<std::string, int>::const_iterator it = mc.cbegin();
         CHECK(it->first == "C");
@@ -158,7 +158,7 @@ TEST_CASE("iterators")
         CHECK(it == mc.cend());
     }
 
-    SECTION("begin/end with nonconst object")
+    SUBCASE("begin/end with nonconst object")
     {
         fifo_map<std::string, int>::iterator it = m.begin();
         CHECK(it->first == "C");
@@ -173,7 +173,7 @@ TEST_CASE("iterators")
         CHECK(it == m.end());
     }
 
-    SECTION("rbegin/rend with nonconst object")
+    SUBCASE("rbegin/rend with nonconst object")
     {
         fifo_map<std::string, int>::reverse_iterator it = m.rbegin();
         CHECK(it->first == "B");
@@ -188,7 +188,7 @@ TEST_CASE("iterators")
         CHECK(it == m.rend());
     }
 
-    SECTION("rbegin/rend with const object")
+    SUBCASE("rbegin/rend with const object")
     {
         fifo_map<std::string, int>::const_reverse_iterator it = mc.rbegin();
         CHECK(it->first == "B");
@@ -203,7 +203,7 @@ TEST_CASE("iterators")
         CHECK(it == mc.rend());
     }
 
-    SECTION("crbegin/crend with nonconst object")
+    SUBCASE("crbegin/crend with nonconst object")
     {
         fifo_map<std::string, int>::const_reverse_iterator it = m.crbegin();
         CHECK(it->first == "B");
@@ -218,7 +218,7 @@ TEST_CASE("iterators")
         CHECK(it == m.crend());
     }
 
-    SECTION("crbegin/crend with const object")
+    SUBCASE("crbegin/crend with const object")
     {
         fifo_map<std::string, int>::const_reverse_iterator it = mc.crbegin();
         CHECK(it->first == "B");
@@ -239,19 +239,19 @@ TEST_CASE("capacity")
     nlohmann::fifo_map<std::string, int> m_empty;
     nlohmann::fifo_map<std::string, int> m_filled = {{"A", 1}, {"B", 2}};
 
-    SECTION("empty")
+    SUBCASE("empty")
     {
         CHECK(m_empty.empty());
         CHECK(! m_filled.empty());
     }
 
-    SECTION("size")
+    SUBCASE("size")
     {
         CHECK(m_empty.size() == 0);
         CHECK(m_filled.size() == 2);
     }
 
-    SECTION("max_size")
+    SUBCASE("max_size")
     {
         CHECK(m_empty.max_size() >= m_empty.size());
         CHECK(m_filled.max_size() >= m_filled.size());
@@ -266,7 +266,7 @@ TEST_CASE("modifiers")
     nlohmann::fifo_map<std::string, int> m_empty;
     nlohmann::fifo_map<std::string, int> m_filled = {{"X", 1}, {"C", 2}};
 
-    SECTION("clear")
+    SUBCASE("clear")
     {
         CHECK(!m_filled.empty());
         CHECK(m_empty.empty());
@@ -281,9 +281,9 @@ TEST_CASE("modifiers")
         CHECK(m_filled.m_keys.empty());
     }
 
-    SECTION("insert")
+    SUBCASE("insert")
     {
-        SECTION("insert value_type (lvalue)")
+        SUBCASE("insert value_type (lvalue)")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -317,7 +317,7 @@ TEST_CASE("modifiers")
             CHECK(collect_keys(m_filled) == "XCA");
         }
 
-        SECTION("insert value_type (rvalue)")
+        SUBCASE("insert value_type (rvalue)")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -349,7 +349,7 @@ TEST_CASE("modifiers")
             CHECK(collect_keys(m_filled) == "XCA");
         }
 
-        SECTION("insert value_type (lvalue) with hint")
+        SUBCASE("insert value_type (lvalue) with hint")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -381,7 +381,7 @@ TEST_CASE("modifiers")
             CHECK(collect_keys(m_filled) == "XCA");
         }
 
-        SECTION("insert value_type (rvalue) with hint")
+        SUBCASE("insert value_type (rvalue) with hint")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -411,7 +411,7 @@ TEST_CASE("modifiers")
             CHECK(collect_keys(m_filled) == "XCA");
         }
 
-        SECTION("insert initializer list")
+        SUBCASE("insert initializer list")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -438,7 +438,7 @@ TEST_CASE("modifiers")
             CHECK(collect_keys(m_filled) == "XCAZB");
         }
 
-        SECTION("insert range")
+        SUBCASE("insert range")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -459,9 +459,9 @@ TEST_CASE("modifiers")
         }
     }
 
-    SECTION("erase")
+    SUBCASE("erase")
     {
-        SECTION("remove element")
+        SUBCASE("remove element")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -477,7 +477,7 @@ TEST_CASE("modifiers")
             CHECK(collect_keys(m_filled) == "X");
         }
 
-        SECTION("remove element range")
+        SUBCASE("remove element range")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -493,7 +493,7 @@ TEST_CASE("modifiers")
             CHECK(collect_keys(m_filled) == "");
         }
 
-        SECTION("remove element by key")
+        SUBCASE("remove element by key")
         {
             // check initial state
             CHECK(m_filled.size() == 2);
@@ -510,7 +510,7 @@ TEST_CASE("modifiers")
         }
     }
 
-    SECTION("swap")
+    SUBCASE("swap")
     {
         // precondition
         CHECK(m_empty.empty());
@@ -531,7 +531,7 @@ TEST_CASE("modifiers")
         CHECK(!m_filled.empty());
     }
 
-    SECTION("emplace")
+    SUBCASE("emplace")
     {
         // check initial state
         CHECK(m_filled.size() == 2);
@@ -563,7 +563,7 @@ TEST_CASE("modifiers")
         CHECK(collect_keys(m_filled) == "XCA");
     }
 
-    SECTION("emplace_hint")
+    SUBCASE("emplace_hint")
     {
         // check initial state
         CHECK(m_filled.size() == 2);
@@ -599,16 +599,16 @@ TEST_CASE("lookup")
     nlohmann::fifo_map<std::string, int> m = {{"A", 1}, {"B", 2}};
     const nlohmann::fifo_map<std::string, int> m_c = m;
 
-    SECTION("count")
+    SUBCASE("count")
     {
         CHECK(m.count("A") == 1);
         CHECK(m.count("B") == 1);
         CHECK(m.count("C") == 0);
     }
 
-    SECTION("find")
+    SUBCASE("find")
     {
-        SECTION("iterators")
+        SUBCASE("iterators")
         {
             auto it_A = m.find("A");
             CHECK(it_A == m.begin());
@@ -624,7 +624,7 @@ TEST_CASE("lookup")
             CHECK(it_C == m.end());
         }
 
-        SECTION("const_iterators")
+        SUBCASE("const_iterators")
         {
             auto it_A = m_c.find("A");
             CHECK(it_A == m_c.cbegin());
@@ -641,9 +641,9 @@ TEST_CASE("lookup")
         }
     }
 
-    SECTION("equal_range")
+    SUBCASE("equal_range")
     {
-        SECTION("iterators")
+        SUBCASE("iterators")
         {
             {
                 std::pair<fifo_map<std::string, int>::iterator, fifo_map<std::string, int>::iterator> range =
@@ -659,7 +659,7 @@ TEST_CASE("lookup")
             }
         }
 
-        SECTION("const_iterators")
+        SUBCASE("const_iterators")
         {
             {
                 std::pair<fifo_map<std::string, int>::const_iterator, fifo_map<std::string, int>::const_iterator>
@@ -676,9 +676,9 @@ TEST_CASE("lookup")
         }
     }
 
-    SECTION("lower_bound")
+    SUBCASE("lower_bound")
     {
-        SECTION("iterators")
+        SUBCASE("iterators")
         {
             {
                 fifo_map<std::string, int>::iterator it = m.lower_bound("A");
@@ -690,7 +690,7 @@ TEST_CASE("lookup")
             }
         }
 
-        SECTION("const_iterators")
+        SUBCASE("const_iterators")
         {
             {
                 fifo_map<std::string, int>::const_iterator it = m_c.lower_bound("A");
@@ -703,9 +703,9 @@ TEST_CASE("lookup")
         }
     }
 
-    SECTION("upper_bound")
+    SUBCASE("upper_bound")
     {
-        SECTION("iterators")
+        SUBCASE("iterators")
         {
             {
                 fifo_map<std::string, int>::iterator it = m.upper_bound("A");
@@ -717,7 +717,7 @@ TEST_CASE("lookup")
             }
         }
 
-        SECTION("const_iterators")
+        SUBCASE("const_iterators")
         {
             {
                 fifo_map<std::string, int>::const_iterator it = m_c.upper_bound("A");
@@ -735,7 +735,7 @@ TEST_CASE("observers")
 {
     nlohmann::fifo_map<std::string, int> m = {{"A", 1}, {"B", 2}};
 
-    SECTION("key_comp")
+    SUBCASE("key_comp")
     {
         auto comp = m.key_comp();
         CHECK(comp("A", "B"));
@@ -752,7 +752,7 @@ TEST_CASE("non-member functions")
     nlohmann::fifo_map<std::string, int> m2 = {{"B", 2}, {"A", 1}};
     nlohmann::fifo_map<std::string, int> m3 = {{"A", 3}, {"B", 4}};
 
-    SECTION("comparison")
+    SUBCASE("comparison")
     {
         CHECK(m1 == m1);
 
@@ -766,7 +766,7 @@ TEST_CASE("non-member functions")
         CHECK(m3 >= m1);
     }
 
-    SECTION("std::swap")
+    SUBCASE("std::swap")
     {
         nlohmann::fifo_map<std::string, int> m_empty;
         nlohmann::fifo_map<std::string, int> m_filled = {{"X", 1}, {"C", 2}};
@@ -793,7 +793,7 @@ TEST_CASE("non-member functions")
 
 TEST_CASE("regression tests")
 {
-    SECTION("issue 2: find() adding a key")
+    SUBCASE("issue 2: find() adding a key")
     {
         nlohmann::fifo_map<std::string, uint8_t> pe;
         for (int i = 0; i < 1000; i++)
@@ -811,7 +811,7 @@ TEST_CASE("regression tests")
 
 TEST_CASE("constructors")
 {
-    SECTION("range iterators constructor")
+    SUBCASE("range iterators constructor")
     {
         std::map<std::string, int> inputs = {{"A", 1}, {"B", 2}};
         nlohmann::fifo_map<std::string, int> m(inputs.begin(), inputs.end());
