@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(fifo_map LANGUAGES CXX)
 
 add_executable(unit
-    src/fifo_map.hpp test/thirdparty/catch/catch.hpp test/unit.cpp
+    src/fifo_map.hpp test/thirdparty/doctest/doctest.h test/unit.cpp
 )
 
 target_include_directories(unit PRIVATE "test" "src" "test/thirdparty")
